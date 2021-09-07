@@ -1,31 +1,19 @@
-from collections import namedtuple
-import altair as alt
-import math
-import pandas as pd
+import numpy as np
 import streamlit as st
-
-"""
-# Alexander's Demo App
-"""
+import plotly.express as px
 
 
-with st.echo(code_location='below'):
-    total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
-    num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
 
-    Point = namedtuple('Point', 'x y')
-    data = []
+fileName = "20210826Z111434.txt"
+totalTimeInSeconds = 0.8446
+numberOfDataPoints = 4224
 
-    points_per_turn = total_points / num_turns
 
-    for curr_point_num in range(total_points):
-        curr_turn, i = divmod(curr_point_num, points_per_turn)
-        angle = (curr_turn + 1) * 2 * math.pi * i / points_per_turn
-        radius = curr_point_num / total_points
-        x = radius * math.cos(angle)
-        y = radius * math.sin(angle)
-        data.append(Point(x, y))
+xData = np.linspace(0, totalTimeInSeconds, numberOfDataPoints)
+yData = np.loadtxt(fileName, delimiter=",")
 
-    st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
-        .mark_circle(color='#0068c9', opacity=0.5)
-        .encode(x='x:Q', y='y:Q'))
+
+
+
+fig = px.line(x=xData, y=yData)
+st.plotly_chart(fig)
